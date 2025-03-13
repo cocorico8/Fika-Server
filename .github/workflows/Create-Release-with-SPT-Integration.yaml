@@ -1,10 +1,43 @@
 on:
+  schedule:
+  - cron: '*/30 * * * *'
   workflow_dispatch:
 
 name: Create Release with SPT Integration
 
 jobs:
+  check-release:
+    runs-on: ubuntu-latest
+    outputs:
+      trigger_build: ${{ steps.check.outputs.trigger_build }}
+    steps:
+      - name: Get latest release tag
+        id: get_release
+        run: |
+          latest_release=$(curl -s "https://api.github.com/repos/project-fika/Fika-Server/releases/latest" | jq -r '.tag_name')
+          echo "Latest release: $latest_release"
+          echo "LATEST_RELEASE=$latest_release" >> $GITHUB_ENV
+
+      - name: Checkout this repo
+        uses: actions/checkout@v3
+
+      - name: Compare with last built release
+        id: check
+        run: |
+          last_release=$(cat last_release.txt || echo "none")
+          if [ "$last_release" != "$LATEST_RELEASE" ]; then
+            echo "$LATEST_RELEASE" > last_release.txt
+            echo "New release detected!"
+            echo "trigger_build=true" >> $GITHUB_ENV
+            echo "trigger_build=true" >> $GITHUB_OUTPUT
+          else
+            echo "No new release found."
+            echo "trigger_build=false" >> $GITHUB_ENV
+            echo "trigger_build=false" >> $GITHUB_OUTPUT
+  
   build:
+    needs: check-release
+    if: ${{ needs.check-release.outputs.trigger_build }} == 'true'
     strategy:
       matrix:
         os: [ "ubuntu-latest" ,"windows-latest" ]
