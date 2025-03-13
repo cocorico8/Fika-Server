@@ -81,7 +81,7 @@ jobs:
           name: FIKACoop-${{ steps.read_package_json.outputs.version }}-WithSPT-${{ env.SPT_VERSION }}-${{ env.COMMIT_SHORT }}
           files: |
             ${{ env.ZIP_NAME }}
-          draft: true
+          draft: false
           prerelease: false
           generate_release_notes: true
         env:
