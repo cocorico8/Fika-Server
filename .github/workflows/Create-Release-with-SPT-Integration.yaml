@@ -34,6 +34,7 @@ jobs:
             echo "No new release found."
             echo "trigger_build=false" >> $GITHUB_ENV
             echo "trigger_build=false" >> $GITHUB_OUTPUT
+          fi
   
   build:
     needs: check-release
