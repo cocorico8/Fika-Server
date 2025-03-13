@@ -21,3 +21,4 @@
 /tsconfig.json
 /types
 /package_release_with_server.ps1
+/last_release.txt
