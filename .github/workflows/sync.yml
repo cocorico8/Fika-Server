@@ -20,3 +20,11 @@ jobs:
           source_branch: "main"
           destination_branch: "main"
           github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Merge workflow -> main
+        uses: devmasx/merge-branch@master
+        with:
+          type: now
+          from_branch: workflow
+          target_branch: main
+          github_token: ${{ secrets.GITHUB_TOKEN }}
