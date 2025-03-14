@@ -36,9 +36,11 @@ jobs:
                -d '{"value":$LATEST_RELEASE}'
             echo "New release detected!"
             echo "trigger_build=true" >> $GITHUB_OUTPUT
+            echo "trigger_build=true" >> $GITHUB_ENV
           else
             echo "No new release found."
             echo "trigger_build=false" >> $GITHUB_OUTPUT
+            echo "trigger_build=false" >> $GITHUB_ENV
           fi
 
   build:
