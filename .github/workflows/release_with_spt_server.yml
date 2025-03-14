@@ -18,6 +18,27 @@ jobs:
           echo "Latest release: $latest_release"
           echo "LATEST_RELEASE=$latest_release" >> $GITHUB_ENV
 
+      - name: Retrieve GitHub Public Key
+        id: get_pubkey
+        run: |
+          response=$(curl -s -H "Authorization: token ${{ secrets.PAT }}" \
+                       -H "Accept: application/vnd.github.v3+json" \
+                       https://api.github.com/repos/cocorico8/Fika-Server/actions/secrets/public-key)
+
+          key_id=$(echo "$response" | jq -r '.key_id')
+          public_key=$(echo "$response" | jq -r '.key')
+
+          echo "KEY_ID=$key_id" >> $GITHUB_ENV
+          echo "PUBLIC_KEY=$public_key" >> $GITHUB_ENV
+
+      - name: Encrypt latest release version
+        id: encrypt_release
+        run: |
+          encrypted_value=$(echo -n "$LATEST_RELEASE" | \
+                            openssl enc -base64 | \
+                            tr -d '\n')
+          echo "ENCRYPTED_RELEASE=$encrypted_value" >> $GITHUB_ENV
+
       - name: Retrieve last release version
         run: echo "LAST_RELEASE=${{ secrets.LAST_RELEASE }}" >> $GITHUB_ENV
 
@@ -26,9 +47,12 @@ jobs:
         run: |
           if [ "$LAST_RELEASE" != "$LATEST_RELEASE" ]; then
             curl -X PUT -H "Authorization: token ${{ secrets.PAT }}" \
-            -H "Accept: application/vnd.github.v3+json" \
-            https://api.github.com/repos/cocorico8/Fika-Server/actions/secrets/LAST_RELEASE \
-            -d '{"encrypted_value":"${{ env.LATEST_RELEASE }}", "key_id": "${{ secrets.GITHUB_KEY_ID }}"}'
+               -H "Accept: application/vnd.github.v3+json" \
+               https://api.github.com/repos/cocorico8/Fika-Server/actions/secrets/LAST_RELEASE \
+               -d '{
+                 "encrypted_value": "'"$ENCRYPTED_RELEASE"'",
+                 "key_id": "'"$KEY_ID"'"
+               }'
             echo "New release detected!"
             echo "trigger_build=true" >> $GITHUB_OUTPUT
           else
