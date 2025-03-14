@@ -10,8 +10,6 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v4
-        with:
-          ref: main
     
       - name: Sync Fork
         uses: repo-sync/github-sync@v2
