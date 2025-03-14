@@ -19,7 +19,12 @@ jobs:
           echo "LATEST_RELEASE=$latest_release" >> $GITHUB_ENV
 
       - name: Retrieve last release version
-        run: echo "LAST_RELEASE=${{ env.LAST_RELEASE }}" >> $GITHUB_ENV
+        run: | 
+          echo "LAST_RELEASE=$(curl -L \
+           -H "Accept: application/vnd.github+json" \
+           -H "Authorization: Bearer ${{ secrets.PAT }}" \
+           -H "X-GitHub-Api-Version: 2022-11-28" \
+           https://api.github.com/repos/cocorico8/Fika-server/actions/variables/LAST_RELEASE | jq -r '.value')" >> $GITHUB_ENV
 
       - name: Compare with last built release
         id: check
