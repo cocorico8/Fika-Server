@@ -85,7 +85,7 @@ jobs:
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ steps.read_package_json.outputs.version }}
+          tag_name: v${{ steps.read_package_json.outputs.version }}
           name: FIKACoop-${{ steps.read_package_json.outputs.version }}-WithSPT-${{ env.SPT_VERSION }}-${{ env.COMMIT_SHORT }}
           files: |
             ${{ env.ZIP_NAME }}
