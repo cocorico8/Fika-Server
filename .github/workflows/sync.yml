@@ -17,7 +17,7 @@ jobs:
           source_repo: "project-fika/Fika-Server"
           source_branch: "main"
           destination_branch: "main"
-          sync_tags: "all"
+          sync_tags: "true"
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Merge workflow -> main
