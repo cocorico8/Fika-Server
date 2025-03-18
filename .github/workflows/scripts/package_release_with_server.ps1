@@ -40,11 +40,14 @@ Write-Output "clone repo"
 if ($Branch.Length -gt 0) {
     Write-Output "Cloning branch/tag $Branch"
     git clone --depth 1 -b $Branch $SOURCE_REPO $SERVER_DIR
+    if ($LASTEXITCODE -ne 0) { throw "Failed to clone SPT Server repository. Check URL/branch." }
 } else {
     Write-Output "Cloning default branch"
     git clone $SOURCE_REPO $SERVER_DIR
+    if ($LASTEXITCODE -ne 0) { throw "Failed to clone SPT Server repository. Check URL." }
     Set-Location $SERVER_DIR
     git checkout $(git tag --sort=-v:refname | Where-Object { $_ -notmatch '-' } | Select-Object -First 1)
+    if ($LASTEXITCODE -ne 0) { throw "Failed to checkout tag: $latestTag" }
     Set-Location ..
 }
 
