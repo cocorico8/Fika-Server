@@ -73,7 +73,7 @@ jobs:
         id: build
         shell: pwsh
         run: |
-          ./.github/workflows/scripts/package_release_with_server.ps1 -Overwrite -Branch "3.10.5" -FIKACoopVer ${{ steps.read_package_json.outputs.version }}
+          ./.github/workflows/scripts/package_release_with_server.ps1 -Overwrite -FIKACoopVer ${{ steps.read_package_json.outputs.version }}
           echo "ZIP_NAME=$(Get-Content "$env:GITHUB_OUTPUT" | Select-String -Pattern "^ZIP_NAME=").Value.Split('=')[1]" >> $GITHUB_ENV
           echo "COMMIT_SHORT=$(Get-Content "$env:GITHUB_OUTPUT" | Select-String -Pattern "^CommitShort=").Value.Split('=')[1]" >> $GITHUB_ENV
           echo "SPT_VERSION=$(Get-Content "$env:GITHUB_OUTPUT" | Select-String -Pattern "^SPT_VERSION=").Value.Split('=')[1]" >> $GITHUB_ENV
