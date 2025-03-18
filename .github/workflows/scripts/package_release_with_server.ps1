@@ -42,10 +42,10 @@ if ($Branch.Length -gt 0) {
     git clone --depth 1 -b $Branch $SOURCE_REPO $SERVER_DIR
 } else {
     Write-Output "Cloning default branch"
-    git clone --depth 1 $SOURCE_REPO $SERVER_DIR
-    cd $SERVER_DIR
+    git clone $SOURCE_REPO $SERVER_DIR
+    Set-Location $SERVER_DIR
     git checkout $(git tag --sort=-v:refname | Where-Object { $_ -notmatch '-' } | Select-Object -First 1)
-    cd ../..
+    Set-Location ../
 }
 
 Set-Location $SERVER_DIR
