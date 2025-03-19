@@ -98,7 +98,7 @@ Set-Location ../../
 
 New-Item -ItemType Directory -Force -Path "$ZIP_Folder/user/mods/fika-server"
 Copy-Item -Path "$SERVER_DIR/project/build\*" -Destination "$ZIP_Folder" -Recurse
-Copy-Item -Path "./dist/*" -Destination "$ZIP_Folder/user/mods/fika-server" -Recurse -Exclude "fika-server.zip"
+Copy-Item -Path "./dist/*" -Destination "$ZIP_Folder/user/mods/fika-server" -Recurse -Exclude "fika-server-*.zip"
 
 # make release package
 if ($IsWindows) {
