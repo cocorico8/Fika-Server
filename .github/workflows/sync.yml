@@ -20,7 +20,7 @@ jobs:
           sync_tags: "true"
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Merge workflow -> main
+      - name: Merge workflows -> main
         uses: devmasx/merge-branch@master
         with:
           type: now
