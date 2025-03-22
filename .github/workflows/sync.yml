@@ -1,0 +1,29 @@
+name: Sync Fork
+on:
+  schedule:
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+    
+      - name: Sync Fork
+        uses: repo-sync/github-sync@v2
+        with:
+          source_repo: "project-fika/Fika-Server"
+          source_branch: "main"
+          destination_branch: "main"
+          sync_tags: "true"
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Merge workflows -> main
+        uses: devmasx/merge-branch@master
+        with:
+          type: now
+          from_branch: workflows
+          target_branch: main
+          github_token: ${{ secrets.GITHUB_TOKEN }}
